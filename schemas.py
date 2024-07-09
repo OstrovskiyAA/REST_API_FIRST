@@ -1,7 +1,6 @@
-{
+post_users = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
-    "additionalProperties": false,
     "properties": {
         "name": {
             "type": "string"
@@ -11,15 +10,11 @@
         },
         "id": {
             "type": "string"
-        },
-        "createdAt": {
-            "type": "string"
         }
     },
     "required": [
         "name",
         "job",
-        "id",
-        "createdAt"
+        "id"
     ]
 }
