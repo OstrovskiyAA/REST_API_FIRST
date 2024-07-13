@@ -1,8 +1,10 @@
 import json
+import time
 
 import allure
 import requests
 from jsonschema import validate
+from selene import browser, have, by
 
 from schemas import post_users, post_user_2
 
@@ -64,3 +66,24 @@ def test_api_with_params():
     assert response.status_code == 201
     with open("post_user.json") as file:
         validate(body, schema=json.loads(file.read()))
+url_3 = "https://demowebshop.tricentis.com/login"
+email="a.a.ostrovskiy@mail.ru"
+password=148888
+payload_3 = {"Email":email, "Password":password}
+def test_authorization_by_api():
+    with allure.step("Open browser"):
+        browser.open("https://demowebshop.tricentis.com/")
+    with allure.step("Authorization by API"):
+        response = requests.post(url_3, data=payload_3, allow_redirects=False)
+    print(response.text)
+    print(response.cookies)
+    print(response.status_code)
+    with allure.step("Get cookie from API"):
+        cookie = response.cookies.get("NOPCOMMERCE.AUTH")
+    with allure.step("Set cookie from API"):
+        # browser.open("https://demowebshop.tricentis.com/")
+        browser.driver.add_cookie({"name":"NOPCOMMERCE.AUTH", "value":cookie})
+        browser.open("https://demowebshop.tricentis.com/")
+    with allure.step("Assertion in terms of registration"):
+        browser.all(".account").first.should(have.exact_text("a.a.ostrovskiy@mail.ru"))
+    time.sleep(5)
