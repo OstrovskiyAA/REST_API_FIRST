@@ -13,6 +13,7 @@ payload = {
   "name": name,
   "job": job
 }
+@allure.link("https://reqres.in", name="Testing API")
 @allure.step("First try")
 def test_api_from_file():
     with allure.step("Get response"):
