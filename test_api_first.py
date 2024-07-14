@@ -1,6 +1,6 @@
 import json
 import time
-
+import logging
 import allure
 import requests
 from allure_commons.model2 import Attachment
@@ -100,6 +100,12 @@ def reqres_api_get(url, **kwargs):
         response=requests.get(url=url, **kwargs)
         allure.attach(body=json.dumps(response.json(), indent=4, ensure_ascii=True),
                       name="Response", attachment_type=AttachmentType.JSON, extension="json")
+        allure.attach(body=response.request.url, name="Request url", attachment_type=AttachmentType.TEXT,
+                      extension="txt")
+        logging.info(response.request.url)
+        logging.info(response.status_code)
+        logging.info(response.text)
+    return response
 
 def test_new():
     reqres_api_get("https://reqres.in/api/unknown/2")
